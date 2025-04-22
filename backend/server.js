@@ -6,7 +6,7 @@ const authRoutes = require('./routes/auth');
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
@@ -14,6 +14,13 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.get('/api/mapbox-token', (req, res) => {
+  const token = process.env.MAPBOX_TOKEN;
+  if (!token) {
+    return res.status(500).json({ error: 'Token not found in environment' });
+  }
+  res.json({ token });
+});
 
 // Connect to MongoDB and run server
 mongoose

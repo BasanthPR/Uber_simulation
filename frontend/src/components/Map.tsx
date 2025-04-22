@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -17,12 +16,28 @@ const Map = ({ pickupLocation, dropoffLocation, className = '' }: MapProps) => {
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const [tokenError, setTokenError] = useState<string>('');
 
+  // Fetch token
   useEffect(() => {
-    // For demo purposes, we would use an environment variable in production
-    // This is just a temporary state for user to input their token
+    const fetchToken = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/mapbox-token');
+        const data = await response.json();
+        setMapboxToken(data.token);
+      } catch (error) {
+        console.error("Failed to fetch Mapbox token:", error);
+        toast({
+          title: "Token Fetch Error",
+          description: "Failed to fetch Mapbox token from backend",
+          variant: "destructive"
+        });
+      }
+    };
+    fetchToken();
+  }, []);
+
+  // Initialize map
+  useEffect(() => {
     if (!mapboxToken) return;
-    
-    // Validate token format - must start with "pk."
     if (!mapboxToken.startsWith('pk.')) {
       setTokenError('Please use a public access token (starts with pk.)');
       toast({
@@ -34,15 +49,14 @@ const Map = ({ pickupLocation, dropoffLocation, className = '' }: MapProps) => {
     } else {
       setTokenError('');
     }
-    
+
     if (mapContainer.current && !map.current) {
       try {
         mapboxgl.accessToken = mapboxToken;
-        
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/dark-v11', // Uber-like dark style
-          center: [-74.006, 40.7128], // Default to NYC
+          style: 'mapbox://styles/mapbox/dark-v11',
+          center: [-74.006, 40.7128],
           zoom: 12,
         });
 
@@ -51,7 +65,6 @@ const Map = ({ pickupLocation, dropoffLocation, className = '' }: MapProps) => {
         });
       } catch (error) {
         console.error('Mapbox initialization error:', error);
-        setTokenError(error instanceof Error ? error.message : 'Failed to initialize map');
         toast({
           title: "Map Error",
           description: error instanceof Error ? error.message : 'Failed to initialize map',
@@ -68,61 +81,91 @@ const Map = ({ pickupLocation, dropoffLocation, className = '' }: MapProps) => {
     };
   }, [mapboxToken]);
 
-  // Add markers when locations change
+  // Add markers and draw route
   useEffect(() => {
     if (!mapLoaded || !map.current) return;
-    
-    // Clear existing markers
+
+    const mapInstance = map.current;
+
+    // Clear markers
     const markers = document.querySelectorAll('.mapboxgl-marker');
     markers.forEach(marker => marker.remove());
-    
+
     // Add pickup marker
     if (pickupLocation) {
       const el = document.createElement('div');
       el.className = 'pickup-marker';
-      el.style.backgroundColor = '#276EF1'; // Uber blue
+      el.style.backgroundColor = '#276EF1';
       el.style.width = '15px';
       el.style.height = '15px';
       el.style.borderRadius = '50%';
       el.style.border = '2px solid white';
-      
-      new mapboxgl.Marker(el)
-        .setLngLat(pickupLocation)
-        .addTo(map.current);
-        
-      map.current.flyTo({
-        center: pickupLocation,
-        zoom: 14,
-        essential: true
-      });
+      new mapboxgl.Marker(el).setLngLat(pickupLocation).addTo(mapInstance);
     }
-    
+
     // Add dropoff marker
     if (dropoffLocation) {
       const el = document.createElement('div');
       el.className = 'dropoff-marker';
-      el.style.backgroundColor = '#05A357'; // Uber green
+      el.style.backgroundColor = '#05A357';
       el.style.width = '15px';
       el.style.height = '15px';
       el.style.borderRadius = '50%';
       el.style.border = '2px solid white';
-      
-      new mapboxgl.Marker(el)
-        .setLngLat(dropoffLocation)
-        .addTo(map.current);
+      new mapboxgl.Marker(el).setLngLat(dropoffLocation).addTo(mapInstance);
     }
-    
-    // If both locations are set, fit bounds to include both
-    if (pickupLocation && dropoffLocation && map.current) {
+
+    // Fit bounds
+    if (pickupLocation && dropoffLocation) {
       const bounds = new mapboxgl.LngLatBounds();
       bounds.extend(pickupLocation);
       bounds.extend(dropoffLocation);
-      
-      map.current.fitBounds(bounds, {
+      mapInstance.fitBounds(bounds, {
         padding: 100,
         maxZoom: 15
       });
+
+      // Fetch and display route
+      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${pickupLocation[0]},${pickupLocation[1]};${dropoffLocation[0]},${dropoffLocation[1]}?geometries=geojson&access_token=${mapboxToken}`)
+        .then(res => res.json())
+        .then(data => {
+          const route = data.routes[0]?.geometry;
+          if (!route) return;
+
+          const routeGeoJSON: GeoJSON.Feature<GeoJSON.Geometry> = {
+            type: "Feature",
+            properties: {},
+            geometry: route,
+          };
+
+          if (mapInstance.getSource('route')) {
+            (mapInstance.getSource('route') as mapboxgl.GeoJSONSource).setData(routeGeoJSON);
+          } else {
+            mapInstance.addSource('route', {
+              type: 'geojson',
+              data: routeGeoJSON,
+            });
+
+            mapInstance.addLayer({
+              id: 'route',
+              type: 'line',
+              source: 'route',
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round',
+              },
+              paint: {
+                'line-color': '#fbb03b',
+                'line-width': 5,
+              },
+            });
+          }
+        })
+        .catch(err => {
+          console.error("Route fetch error:", err);
+        });
     }
+
   }, [pickupLocation, dropoffLocation, mapLoaded]);
 
   return (
@@ -145,7 +188,6 @@ const Map = ({ pickupLocation, dropoffLocation, className = '' }: MapProps) => {
         </div>
       )}
       <div ref={mapContainer} className="w-full h-full rounded-lg overflow-hidden" />
-      {/* Overlay with Uber logo when map is loading or not available */}
       {(!mapboxToken || !mapLoaded) && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm z-0">
           <div className="text-4xl font-bold mb-4">Uber</div>
