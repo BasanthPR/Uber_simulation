@@ -15,33 +15,63 @@ const SignupPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // For demo purposes, just check if all fields are provided
-    if (firstName && lastName && email && password) {
-      // Store username in localStorage
-      localStorage.setItem('username', `${firstName} ${lastName}`);
-      
-      setTimeout(() => {
-        setIsLoading(false);
+  
+    // ✅ Frontend field validation
+    if (!firstName || !lastName || !email || !password) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields.",
+        variant: "destructive"
+      });
+      setIsLoading(false);
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password
+        })
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", `${data.user.firstName} ${data.user.lastName}`);
         toast({
           title: "Account created",
           description: "Your account has been successfully created."
         });
-        navigate('/');
-      }, 1000);
-    } else {
-      setIsLoading(false);
+        navigate("/");
+      } else {
+        toast({
+          title: "Signup failed",
+          description: data.message || "Something went wrong",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
       toast({
         title: "Signup failed",
-        description: "Please fill in all required fields.",
+        description: "Network error. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
-
+  
   const handleThirdPartySignup = (provider: string) => {
     setIsLoading(true);
     

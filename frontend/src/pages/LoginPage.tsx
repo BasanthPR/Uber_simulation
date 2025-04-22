@@ -13,36 +13,57 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // For demo purposes, just check if email and password are provided
-    if (email && password) {
-      // Extract username from email
-      const username = email.split('@')[0];
-      
-      // Store username in localStorage
-      localStorage.setItem('username', username);
-      
-      setTimeout(() => {
-        setIsLoading(false);
+  
+    if (!email || !password) {
+      toast({
+        title: "Missing fields",
+        description: "Please enter both email and password.",
+        variant: "destructive"
+      });
+      setIsLoading(false);
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", `${data.user.firstName} ${data.user.lastName}`);
         toast({
           title: "Welcome back!",
           description: "You have successfully logged in."
         });
-        navigate('/');
-      }, 1000);
-    } else {
-      setIsLoading(false);
+        navigate("/");
+      } else {
+        toast({
+          title: "Login failed",
+          description: data.message || "Invalid credentials",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
       toast({
         title: "Login failed",
-        description: "Please enter both email and password.",
+        description: "Network error. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
-  };
-
+  };  
+  
   const handleThirdPartyLogin = (provider: string) => {
     setIsLoading(true);
     
