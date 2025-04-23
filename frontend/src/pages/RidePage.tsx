@@ -160,7 +160,8 @@ const RidePage = () => {
 
             {/* Pickup Input */}
             <div className="relative mb-3">
-              <div className="absolute top-3 left-3 w-2 h-2 bg-black rounded-full" />
+            <div className="flex">
+              <div className="absolute top-1/2 left-3 -translate-y-1/2 w-3 h-3 bg-black rounded-full shadow-sm border border-white" />
               <input
                 type="text"
                 placeholder="Pickup location"
@@ -187,12 +188,14 @@ const RidePage = () => {
                 </ul>
               )}
             </div>
+            </div>
 
             {/* Dropoff Input */}
             <div className="relative mb-4">
               <div className="absolute top-3 left-3 w-2 h-2 bg-black rounded-full" />
               <div className="flex">
                 <div className="relative w-full">
+                <div className="absolute top-1/2 left-3 -translate-y-1/2 w-3 h-3 bg-black square-full shadow-sm border border-white" />
                   <input
                     type="text"
                     placeholder="Dropoff location"
@@ -220,14 +223,37 @@ const RidePage = () => {
                   )}
                 </div>
                 <Button
-                  variant="ghost"
-                  className="border border-gray-300 border-l-0 rounded-l-none rounded-r-md px-2"
+                  // variant="ghost"
+                  className="ml-2 z-50 border border-gray-300 bg-white rounded-md px-2"
                   onClick={handleAddStop}
                 >
                   <Plus className="h-5 w-5" />
                 </Button>
               </div>
             </div>
+            {/* Additional Stops */}
+            {additionalStops.map((stop, index) => (
+              <div key={index} className="relative mb-4 flex">
+                <div className="relative w-full">
+                  <div className="absolute top-1/2 left-3 -translate-y-1/2 w-3 h-3 bg-black rounded-full shadow-sm border border-white" />
+                  <input
+                    type="text"
+                    placeholder={`Stop ${index + 1}`}
+                    className="w-full p-3 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black/80 transition"
+                    value={stop}
+                    onChange={(e) => updateStop(index, e.target.value)}
+                  />
+                </div>
+                <Button
+                  variant="ghost"
+                  className="ml-2 border border-gray-300 rounded-md px-2"
+                  onClick={() => handleRemoveStop(index)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+            ))}
+
 
             {/* Time & Rider Dialogs */}
             <div className="mb-4">
@@ -244,7 +270,7 @@ const RidePage = () => {
                     <ChevronDown className="h-5 w-5" />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-md bg-white rounded-md shadow-lg">
                   <div className="py-2">
                     <h3 className="text-lg font-medium mb-2">
                       When do you want to be picked up?
@@ -253,8 +279,8 @@ const RidePage = () => {
                       {timeOptions.map((option) => (
                         <Button
                           key={option}
-                          variant="ghost"
-                          className="w-full justify-start py-2 px-3 text-left"
+                          // variant="outline"
+                          className="w-full justify-start py-2 px-3 text-left border border-gray-400 rounded-md hover:border-black"
                           onClick={() => {
                             setPickupTime(option);
                             setPickupModalOpen(false);
@@ -283,7 +309,7 @@ const RidePage = () => {
                     <ChevronDown className="h-5 w-5" />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-md bg-white rounded-md shadow-lg">
                   <div className="py-2">
                     <h3 className="text-lg font-medium mb-2">
                       Who is this ride for?
@@ -292,8 +318,8 @@ const RidePage = () => {
                       {riderOptions.map((option) => (
                         <Button
                           key={option}
-                          variant="ghost"
-                          className="w-full justify-start py-2 px-3 text-left"
+                          // variant="ghost"
+                          className="w-full justify-start py-2 px-3 text-left border border-gray-400 rounded-md hover:border-black"
                           onClick={() => {
                             setSelectedRider(option);
                             setRiderModalOpen(false);
