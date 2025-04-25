@@ -218,3 +218,308 @@ const SignupPage = () => {
 };
 
 export default SignupPage;
+
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { Link } from "react-router-dom";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { toast } from "@/components/ui/use-toast";
+
+// const SignupPage = () => {
+//   const [formData, setFormData] = useState({
+//     customer_id: "",
+//     first_name: "",
+//     last_name: "",
+//     address: "",
+//     city: "",
+//     state: "",
+//     zip_code: "",
+//     phone_number: "",
+//     email: "",
+//     card_type: "",
+//     last_4_digits: "",
+//     expiry_month: "",
+//     expiry_year: "",
+//     password: "",
+//   });
+//   const [isLoading, setIsLoading] = useState(false);
+//   const navigate = useNavigate();
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const { name, value } = e.target;
+//     setFormData((prev) => ({ ...prev, [name]: value }));
+//   };
+
+//   const validateForm = () => {
+//     const {
+//       customer_id,
+//       first_name,
+//       last_name,
+//       address,
+//       city,
+//       state,
+//       zip_code,
+//       phone_number,
+//       email,
+//       card_type,
+//       last_4_digits,
+//       expiry_month,
+//       expiry_year,
+//       password,
+//     } = formData;
+
+//     if (
+//       !customer_id ||
+//       !first_name ||
+//       !last_name ||
+//       !address ||
+//       !city ||
+//       !state ||
+//       !zip_code ||
+//       !phone_number ||
+//       !email ||
+//       !card_type ||
+//       !last_4_digits ||
+//       !expiry_month ||
+//       !expiry_year ||
+//       !password
+//     ) {
+//       toast({
+//         title: "Missing fields",
+//         description: "Please fill in all required fields.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     if (!/^\d{10}$/.test(phone_number)) {
+//       toast({
+//         title: "Invalid phone number",
+//         description: "Phone number must be 10 digits.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     if (!/^\d{5}$/.test(zip_code)) {
+//       toast({
+//         title: "Invalid ZIP code",
+//         description: "ZIP code must be 5 digits.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     if (!/^\S+@\S+\.\S+$/.test(email)) {
+//       toast({
+//         title: "Invalid email",
+//         description: "Please enter a valid email address.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     if (!/^\d{4}$/.test(last_4_digits)) {
+//       toast({
+//         title: "Invalid Card Details",
+//         description: "Last 4 digits must be exactly 4 numbers.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     if (!/^(0[1-9]|1[0-2])$/.test(expiry_month)) {
+//       toast({
+//         title: "Invalid Expiry Month",
+//         description: "Expiry month must be between 01 and 12.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     if (!/^\d{4}$/.test(expiry_year)) {
+//       toast({
+//         title: "Invalid Expiry Year",
+//         description: "Expiry year must be a 4-digit number.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     if (password.length < 6) {
+//       toast({
+//         title: "Weak password",
+//         description: "Password must be at least 6 characters long.",
+//         variant: "destructive",
+//       });
+//       return false;
+//     }
+
+//     return true;
+//   };
+
+//   const handleSignup = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setIsLoading(true);
+
+//     if (!validateForm()) {
+//       setIsLoading(false);
+//       return;
+//     }
+
+//     try {
+//       const response = await fetch("http://localhost:3000/api/auth/signup", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(formData),
+//       });
+
+//       const data = await response.json();
+
+//       if (response.ok) {
+//         toast({
+//           title: "Account created",
+//           description: "Your account has been successfully created.",
+//         });
+//         navigate("/");
+//       } else {
+//         toast({
+//           title: "Signup failed",
+//           description: data.message || "Something went wrong",
+//           variant: "destructive",
+//         });
+//       }
+//     } catch (error) {
+//       toast({
+//         title: "Signup failed",
+//         description: "Network error. Please try again.",
+//         variant: "destructive",
+//       });
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex flex-col bg-white">
+//       <header className="border-b border-gray-200 py-4">
+//         <div className="container mx-auto px-4">
+//           <Link to="/" className="text-black text-2xl font-bold">
+//             Uber
+//           </Link>
+//         </div>
+//       </header>
+
+//       <main className="flex-1 flex items-center justify-center py-12 px-4">
+//         <div className="w-full max-w-md">
+//           <h1 className="text-3xl font-bold mb-6">Create your account</h1>
+
+//           <form onSubmit={handleSignup} className="space-y-4">
+//             <Input
+//               name="customer_id"
+//               placeholder="Customer ID"
+//               value={formData.customer_id}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="first_name"
+//               placeholder="First Name"
+//               value={formData.first_name}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="last_name"
+//               placeholder="Last Name"
+//               value={formData.last_name}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="address"
+//               placeholder="Address"
+//               value={formData.address}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="city"
+//               placeholder="City"
+//               value={formData.city}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="state"
+//               placeholder="State"
+//               value={formData.state}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="zip_code"
+//               placeholder="ZIP Code"
+//               value={formData.zip_code}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="phone_number"
+//               placeholder="Phone Number"
+//               value={formData.phone_number}
+//               onChange={handleChange}
+//             />
+//             <Input
+//               name="email"
+//               placeholder="Email"
+//               value={formData.email}
+//               onChange={handleChange}
+//             />
+
+//             <h2 className="text-xl font-bold mt-6">Credit Card</h2>
+//             <Input
+//               name="card_type"
+//               placeholder="Card Type (e.g., Visa, MasterCard)"
+//               value={formData.card_type}
+//               onChange={handleChange}
+//             />
+//             <div className="flex gap-4">
+//               <Input
+//                 name="last_4_digits"
+//                 placeholder="Last 4 Digits"
+//                 value={formData.last_4_digits}
+//                 onChange={handleChange}
+//                 className="flex-1"
+//               />
+//               <Input
+//                 name="expiry_month"
+//                 placeholder="Expiry Month (MM)"
+//                 value={formData.expiry_month}
+//                 onChange={handleChange}
+//                 className="flex-1"
+//               />
+//               <Input
+//                 name="expiry_year"
+//                 placeholder="Expiry Year (YYYY)"
+//                 value={formData.expiry_year}
+//                 onChange={handleChange}
+//                 className="flex-1"
+//               />
+//             </div>
+
+//             <Input
+//               name="password"
+//               type="password"
+//               placeholder="Password"
+//               value={formData.password}
+//               onChange={handleChange}
+//             />
+
+//             <Button type="submit" className="w-full" disabled={isLoading}>
+//               {isLoading ? "Creating Account..." : "Sign Up"}
+//             </Button>
+//           </form>
+//         </div>
+//       </main>
+//     </div>
+//   );
+// };
+
+// export default SignupPage;
