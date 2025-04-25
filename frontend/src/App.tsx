@@ -16,6 +16,8 @@ import ActivityPage from "./pages/ActivityPage";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
+
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -36,6 +38,7 @@ const App = () => (
             <Route path="/activity" element={<ActivityPage />} />
             <Route path="/profile/:username" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
+
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

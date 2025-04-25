@@ -9,6 +9,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import Map from "@/components/Map";
 import RideNavbar from "@/components/RideNavbar";
+import axios from 'axios';
 
 const RidePage = () => {
   const [pickup, setPickup] = useState("");
@@ -34,7 +35,7 @@ const RidePage = () => {
 
   const riderOptions = ["For me", "For someone else"];
 
-  // 🔥 Fetch the token once from your backend
+  // Fetch the token once from your backend
   useEffect(() => {
     const fetchToken = async () => {
       try {
@@ -104,7 +105,7 @@ const RidePage = () => {
   }, [dropoff, mapboxToken]);
   
 
-  const handleAddressSearch = () => {
+  const handleAddressSearch = async () => {
     if (!pickup || !dropoff) {
       toast({
         title: "Missing information",
@@ -113,11 +114,30 @@ const RidePage = () => {
       });
       return;
     }
+    try {
+      const res = await axios.post("http://localhost:3000/api/rides", {
+        pickup,
+        dropoff,
+        pickupCoords: pickupLocation,
+        dropoffCoords: dropoffLocation,
+        time: pickupTime,
+        rider: selectedRider,
+        additionalStops,
+      });
+
     toast({
       title: "Searching for rides",
       description: "Finding the best options for your trip",
     });
-  };
+    console.log("Ride saved:", res.data);
+  } catch (err) {
+    toast({
+      title: "Request failed",
+      description: "Something went wrong. Please try again.",
+      variant: "destructive",
+    });
+  }
+};
 
   const handleAddStop = () => {
     if (additionalStops.length < 3) {

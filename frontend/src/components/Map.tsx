@@ -187,7 +187,7 @@ const Map = ({ pickupLocation, dropoffLocation, className = '' }: MapProps) => {
           )}
         </div>
       )}
-      <div ref={mapContainer} className="w-full h-full rounded-lg overflow-hidden" />
+      <div ref={mapContainer} className="w-full h-full rounded-lg overflow-hidden ${className}" />
       {(!mapboxToken || !mapLoaded) && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm z-0">
           <div className="text-4xl font-bold mb-4">Uber</div>
