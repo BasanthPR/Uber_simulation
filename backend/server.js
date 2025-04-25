@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import rideRoutes from "./routes/ride.js";
 import billingRoutes from "./routes/billing.js";
+<<<<<<< Updated upstream
 // const express = require('express');
 // const mongoose = require('mongoose');
 // const cors = require('cors');
@@ -52,6 +53,10 @@ const dotenv = require('dotenv');
 // Route Imports
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profileRoute'); // <-- newly added
+=======
+import adminAuthRoutes from "./routes/adminAuthRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+>>>>>>> Stashed changes
 
 dotenv.config();
 
@@ -64,6 +69,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/rides', rideRoutes);
 app.use('/api/billing', billingRoutes);
+app.use("/api/admin", adminAuthRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use('/api/profile', profileRoutes); // <-- new route added
 

@@ -18,7 +18,7 @@ const signup = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      role: "customer"  // Force role to customer
+      role: "customer"  
     });
 
     const token = jwt.sign(

@@ -14,7 +14,7 @@ router.get("/search", authenticateToken, searchBills);
 router.post("/create", authenticateToken, authorizeRoles("admin", "driver", "customer"), createBill);
 router.get("/:billingId", authenticateToken, getBillById);
 router.delete("/:billingId", authenticateToken, authorizeRoles("admin", "customer"), deleteBill);
-//router.get("/search-by-customer/:customerId", authenticateToken, authorizeRoles("admin"), searchBillsByCustomerId); // ✅ ADD THIS LINE
+//router.get("/search-by-customer/:customerId", authenticateToken, authorizeRoles("admin"), searchBillsByCustomerId); 
 
 // router.get("/search", authenticateToken, authorizeRoles("admin", "driver", "customer"), searchBills);
 

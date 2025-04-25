@@ -17,7 +17,7 @@ const billingSchema = new mongoose.Schema({
   driverId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   rideId: { type: mongoose.Schema.Types.ObjectId, ref: "Ride" }
-}, { timestamps: true }); // ✅ Adds createdAt, updatedAt
+}, { timestamps: true });
 
 
 module.exports = mongoose.model("Billing", billingSchema);

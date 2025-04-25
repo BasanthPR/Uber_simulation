@@ -2,7 +2,7 @@ const Billing = require("../models/billing");
 const { v4: uuidv4 } = require("uuid");
 const { Types, isValidObjectId } = require("mongoose");
 
-// ✅ Create Bill
+// Create Bill
 const createBill = async (req, res) => {
   try {
     const billingId = `${Math.floor(100 + Math.random() * 900)}-${Math.floor(10 + Math.random() * 90)}-${Math.floor(100 + Math.random() * 900)}`;
@@ -28,7 +28,7 @@ const createBill = async (req, res) => {
   }
 };
 
-// ✅ Get Bill By billingId
+// Get Bill By billingId
 const getBillById = async (req, res) => {
   try {
     const bill = await Billing.findOne({ billingId: req.params.billingId });
@@ -39,7 +39,7 @@ const getBillById = async (req, res) => {
   }
 };
 
-// ✅ Delete Bill
+// Delete Bill
 const deleteBill = async (req, res) => {
   try {
     const deleted = await Billing.findOneAndDelete({ billingId: req.params.billingId });
@@ -55,7 +55,7 @@ const deleteBill = async (req, res) => {
   }
 };
 
-// ✅ Search Bills (with optional filters)
+// Search Bills (with optional filters)
 const searchBills = async (req, res) => {
   try {
     const {
@@ -108,12 +108,12 @@ const searchBills = async (req, res) => {
       bills,
     });
   } catch (err) {
-    console.error("❌ Search Bills Error:", err.message);
+    console.error("Search Bills Error:", err.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// ✅ NEW: Search Bills by Customer ID
+// Search Bills by Customer ID
 const searchBillsByCustomerId = async (req, res) => {
   try {
     const { customerId } = req.params;
@@ -134,12 +134,12 @@ const searchBillsByCustomerId = async (req, res) => {
       bills,
     });
   } catch (err) {
-    console.error("❌ Error searching bills by customerId:", err.message);
+    console.error("Error searching bills by customerId:", err.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// ✅ Predict Fare
+// Predict Fare
 const predictFare = async (req, res) => {
   try {
     const { pickupLocation, dropoffLocation, pickupDatetime } = req.body;
@@ -161,7 +161,7 @@ const predictFare = async (req, res) => {
   }
 };
 
-// ✅ Exports
+// Exports
 module.exports = {
   createBill,
   getBillById,
