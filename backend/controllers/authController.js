@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/user.js';
 
 // Customer Signup Controller
 const signup = async (req, res) => {
@@ -18,7 +18,7 @@ const signup = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      role: "customer"  
+      role: "customer"
     });
 
     const token = jwt.sign(
@@ -58,4 +58,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+export { signup, login };

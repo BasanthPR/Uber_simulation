@@ -1,7 +1,7 @@
-const User = require("../models/user");
-const Ride = require("../models/ride");
-const Bill = require("../models/billing");
-const { Types } = require("mongoose");
+import User from "../models/user.js";
+import Ride from "../models/ride.js";
+import Bill from "../models/billing.js";
+import { Types } from "mongoose";
 
 // Add driver
 const addDriver = async (req, res) => {
@@ -91,7 +91,7 @@ const getBillById = async (req, res) => {
   res.json(bill);
 };
 
-module.exports = {
+export {
   addDriver,
   addCustomer,
   getUser,

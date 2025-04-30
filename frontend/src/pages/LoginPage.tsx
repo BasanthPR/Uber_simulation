@@ -39,6 +39,7 @@ const LoginPage = () => {
       const data = await response.json();
   
       if (response.ok) {
+        console.log('Token:', data.token);
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", `${data.user.firstName} ${data.user.lastName}`);
         toast({

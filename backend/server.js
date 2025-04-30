@@ -36,10 +36,7 @@ app.get('/api/mapbox-token', (req, res) => {
 
 // MongoDB Connection and Server Start
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI,)
   .then(() => {
     console.log('MongoDB connected');
     app.listen(PORT, () =>

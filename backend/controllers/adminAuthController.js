@@ -1,6 +1,6 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import User from "../models/user.js"; // Note the `.js` extension for ESM imports
 
 // Admin Signup
 const signup = async (req, res) => {
@@ -68,7 +68,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = {
-  signup,
-  login
-};
+export { signup, login };

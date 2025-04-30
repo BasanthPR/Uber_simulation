@@ -1,9 +1,9 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   authenticateToken,
   authorizeRoles
-} = require("../middleware/authMiddleware");
-const {
+} from "../middleware/authMiddleware.js";
+import {
   addDriver,
   addCustomer,
   getUser,
@@ -13,7 +13,7 @@ const {
   getRidesPerCustomer,
   searchBills,
   getBillById
-} = require("../controllers/adminController");
+} from "../controllers/adminController.js";
 
 const router = express.Router();
 
@@ -36,4 +36,4 @@ router.get("/charts/rides-per-customer", getRidesPerCustomer);
 router.get("/bills/search", searchBills);
 router.get("/bills/:billId", getBillById);
 
-module.exports = router;
+export default router;

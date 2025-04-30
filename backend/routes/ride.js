@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import Ride from "../models/ride.js";
+
 const router = express.Router();
-const Ride = require("../models/ride");
 
 router.post("/", async (req, res) => {
   try {
@@ -11,4 +12,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

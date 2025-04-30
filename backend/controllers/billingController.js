@@ -1,6 +1,5 @@
-const Billing = require("../models/billing");
-const { v4: uuidv4 } = require("uuid");
-const { Types, isValidObjectId } = require("mongoose");
+import Billing from "../models/billing.js";
+import { Types, isValidObjectId } from "mongoose";
 
 // Create Bill
 const createBill = async (req, res) => {
@@ -56,6 +55,7 @@ const deleteBill = async (req, res) => {
 };
 
 // Search Bills (with optional filters)
+// Search Bills (with optional filters + improved query logic)
 const searchBills = async (req, res) => {
   try {
     const {
@@ -70,13 +70,19 @@ const searchBills = async (req, res) => {
 
     const filters = [];
 
+    // Date range filter
     if (startDate || endDate) {
       const dateRange = {};
       if (startDate) dateRange.$gte = new Date(startDate);
-      if (endDate) dateRange.$lte = new Date(endDate);
+      if (endDate) {
+        const to = new Date(endDate);
+        to.setDate(to.getDate() + 1);  // Include full end date
+        dateRange.$lt = to;
+      }
       filters.push({ createdAt: dateRange });
     }
 
+    // Amount range filter
     if (minAmount || maxAmount) {
       const amountRange = {};
       if (minAmount) amountRange.$gte = parseFloat(minAmount);
@@ -84,17 +90,26 @@ const searchBills = async (req, res) => {
       filters.push({ totalAmount: amountRange });
     }
 
+    // General search (billingId, _id, rideId, customerId, driverId)
     if (q) {
-      filters.push({
-        $or: [
-          { billingId: { $regex: q, $options: "i" } },
-          { rideId: isValidObjectId(q) ? new Types.ObjectId(q) : null },
-        ],
-      });
+      const orFilters = [
+        { billingId: { $regex: q, $options: "i" } }
+      ];
+
+      if (isValidObjectId(q)) {
+        orFilters.push({ _id: new Types.ObjectId(q) });
+        orFilters.push({ rideId: new Types.ObjectId(q) });
+        orFilters.push({ customerId: new Types.ObjectId(q) });
+        orFilters.push({ driverId: new Types.ObjectId(q) });
+      }
+
+      filters.push({ $or: orFilters });
     }
 
+    // Combine all filters
     const query = filters.length ? { $and: filters } : {};
 
+    // Query execution
     const totalResults = await Billing.countDocuments(query);
     const bills = await Billing.find(query)
       .skip((page - 1) * parseInt(limit))
@@ -107,11 +122,13 @@ const searchBills = async (req, res) => {
       limit: parseInt(limit),
       bills,
     });
+
   } catch (err) {
     console.error("Search Bills Error:", err.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 // Search Bills by Customer ID
 const searchBillsByCustomerId = async (req, res) => {
@@ -162,7 +179,7 @@ const predictFare = async (req, res) => {
 };
 
 // Exports
-module.exports = {
+export {
   createBill,
   getBillById,
   deleteBill,

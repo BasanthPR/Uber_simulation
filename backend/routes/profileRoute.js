@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import User from '../models/user.js';
+
 const router = express.Router();
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 
 // JWT Auth Middleware
 const authMiddleware = (req, res, next) => {
@@ -62,4 +63,4 @@ router.put('/', authMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,12 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const {
-  signup,
-  login
-} = require("../controllers/adminAuthController");
+import express from "express";
+import { signup, login } from "../controllers/adminAuthController.js"; 
 
-// 🔐 Admin-only auth endpoints
+const router = express.Router();
+
+// Admin-only auth endpoints
 router.post("/signup", signup);
 router.post("/login", login);
 
-module.exports = router;
+export default router;
