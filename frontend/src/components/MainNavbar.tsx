@@ -1,24 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Search, ChevronDown, User } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Search, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 
 const MainNavbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // true if token exists
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    setIsLoggedIn(false);
-    navigate("/login");
-  };
-
   return (
     <header className="fixed top-0 left-0 right-0 bg-black text-white z-50 h-16">
       <div className="h-full mx-auto max-w-7xl flex items-center justify-between px-4 md:px-8">
@@ -26,7 +10,7 @@ const MainNavbar = () => {
           <Link to="/" className="text-white font-bold text-2xl">
             Uber
           </Link>
-
+          
           <nav className="hidden md:flex space-x-8">
             <Link to="/ride" className="text-white hover:text-gray-300 transition-colors">
               Ride
@@ -34,15 +18,15 @@ const MainNavbar = () => {
             <Link to="/drive" className="text-white hover:text-gray-300 transition-colors">
               Drive
             </Link>
-            <Link to="/business" className="text-white hover:text-gray-300 transition-colors">
+            <a href="https://www.uber.com/us/en/business/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300 transition-colors">
               Business
-            </Link>
-            <Link to="/deliver" className="text-white hover:text-gray-300 transition-colors">
+            </a>
+            <a href="https://www.uber.com/us/en/deliver/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300 transition-colors">
               Deliver
-            </Link>
+            </a>
           </nav>
         </div>
-
+        
         <div className="flex items-center gap-4">
           <div className="relative hidden md:block">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -57,38 +41,26 @@ const MainNavbar = () => {
               />
             </form>
           </div>
-
+          
           <a href="https://help.uber.com/" target="_blank" rel="noopener noreferrer">
             <Button variant="ghost" size="sm" className="text-white">
               Help
             </Button>
           </a>
-
-          {isLoggedIn ? (
-            <>
-              <Link to="/profile">
-                <Button variant="ghost" size="sm" className="text-white">
-                  <User className="w-5 h-5 mr-1" /> Profile
-                </Button>
-              </Link>
-              <Button variant="ghost" size="sm" className="text-white" onClick={handleLogout}>
-                Logout
+          
+          <div className="flex items-center space-x-2">
+            <Link to="/login">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
+                Log in
               </Button>
-            </>
-          ) : (
-            <>
-              <Link to="/login">
-                <Button variant="ghost" size="sm" className="text-white">
-                  Log in
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button variant="default" size="sm" className="bg-white text-black hover:bg-gray-100">
-                  Sign up
-                </Button>
-              </Link>
-            </>
-          )}
+            </Link>
+            
+            <Link to="/signup">
+              <Button variant="default" size="sm" className="bg-white text-black hover:bg-gray-100">
+                Sign up
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </header>
