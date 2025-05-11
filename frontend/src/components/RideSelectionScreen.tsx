@@ -89,133 +89,133 @@ const RideSelectionScreen: React.FC<RideSelectionScreenProps> = ({
 
   // Main ride selection screen
   if (!isConfirmingRide) {
-    return (
-      <div className="h-screen flex flex-col bg-gray-100">
+  return (
+    <div className="h-screen flex flex-col bg-gray-100">
         <div className="relative h-2/5">
-          {/* Map area */}
-          <Map 
-            pickupLocation={[-122.1430, 37.4419]} // Palo Alto
-            dropoffLocation={[-122.0841, 37.3893]} // Mountain View
-            className="w-full h-full"
-          />
-          
-          {/* Back button */}
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute top-4 left-4 bg-white rounded-full w-10 h-10"
-            onClick={onBack}
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </div>
+        {/* Map area */}
+        <Map 
+          pickupLocation={[-122.1430, 37.4419]} // Palo Alto
+          dropoffLocation={[-122.0841, 37.3893]} // Mountain View
+          className="w-full h-full"
+        />
         
+        {/* Back button */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="absolute top-4 left-4 bg-white rounded-full w-10 h-10"
+          onClick={onBack}
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+      </div>
+      
         <div className="flex-1 bg-white rounded-t-3xl -mt-6 overflow-hidden flex flex-col">
           <div className="p-4 w-full max-w-md mx-auto overflow-y-auto flex-grow">
-            <div className="flex justify-center mb-4">
-              <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
-            </div>
-            
-            <h2 className="text-xl font-bold mb-4">Choose a ride</h2>
-            
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
+          </div>
+          
+          <h2 className="text-xl font-bold mb-4">Choose a ride</h2>
+          
             {/* Single ride option */}
             <div className="mb-4">
-              <div
+          <div
                 className="border border-black rounded-lg p-4 flex items-center justify-between cursor-pointer bg-gray-50"
-              >
-                <div className="flex items-center gap-4">
-                  <Car className="h-12 w-12" />
-                  <div>
+          >
+            <div className="flex items-center gap-4">
+              <Car className="h-12 w-12" />
+              <div>
                     <p className="font-medium">{rideOption.name}</p>
                     <p className="text-sm text-gray-500">{rideOption.description}</p>
-                  </div>
-                </div>
-                <div className="text-right">
+              </div>
+            </div>
+            <div className="text-right">
                   <p className="font-bold">${rideOption.price.toFixed(2)}</p>
                   <p className="text-sm text-gray-500">{rideOption.eta}</p>
                 </div>
-              </div>
             </div>
+          </div>
+          
+          {/* Payment method */}
+          <div className="mt-6">
+            <p className="font-medium mb-2">Payment</p>
             
-            {/* Payment method */}
-            <div className="mt-6">
-              <p className="font-medium mb-2">Payment</p>
-              
-              {customerProfile?.paymentMethods && customerProfile.paymentMethods.length > 0 ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-between flex items-center h-auto py-3"
+            {customerProfile?.paymentMethods && customerProfile.paymentMethods.length > 0 ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between flex items-center h-auto py-3"
+                  >
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="h-5 w-5" />
+                      {selectedMethod ? (
+                        <span>
+                          {selectedMethod.type} •••• {selectedMethod.last4Digits}
+                        </span>
+                      ) : (
+                        <span>Select payment method</span>
+                      )}
+                    </div>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-white">
+                  {customerProfile.paymentMethods.map(method => (
+                    <DropdownMenuItem
+                      key={method.id}
+                      className="flex items-center justify-between py-2"
+                      onSelect={() => setSelectedPaymentMethod(method.id)}
                     >
                       <div className="flex items-center gap-2">
-                        <CreditCard className="h-5 w-5" />
-                        {selectedMethod ? (
-                          <span>
-                            {selectedMethod.type} •••• {selectedMethod.last4Digits}
-                          </span>
-                        ) : (
-                          <span>Select payment method</span>
-                        )}
+                        <CreditCard className="h-4 w-4" />
+                        <span>
+                          {method.type} •••• {method.last4Digits}
+                        </span>
                       </div>
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 bg-white">
-                    {customerProfile.paymentMethods.map(method => (
-                      <DropdownMenuItem
-                        key={method.id}
-                        className="flex items-center justify-between py-2"
-                        onSelect={() => setSelectedPaymentMethod(method.id)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <CreditCard className="h-4 w-4" />
-                          <span>
-                            {method.type} •••• {method.last4Digits}
-                          </span>
-                        </div>
-                        {selectedPaymentMethod === method.id && (
-                          <Check className="h-4 w-4" />
-                        )}
-                      </DropdownMenuItem>
-                    ))}
-                    <DropdownMenuItem>
-                      <div className="flex items-center gap-2">
-                        <Settings className="h-4 w-4" />
-                        <span>Add payment method</span>
-                      </div>
+                      {selectedPaymentMethod === method.id && (
+                        <Check className="h-4 w-4" />
+                      )}
                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Button
-                  variant="outline"
-                  className="w-full justify-start flex items-center h-auto py-3"
-                >
-                  <CreditCard className="h-5 w-5 mr-2" />
-                  Add payment method
-                </Button>
-              )}
+                  ))}
+                  <DropdownMenuItem>
+                    <div className="flex items-center gap-2">
+                      <Settings className="h-4 w-4" />
+                      <span>Add payment method</span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button
+                variant="outline"
+                className="w-full justify-start flex items-center h-auto py-3"
+              >
+                <CreditCard className="h-5 w-5 mr-2" />
+                Add payment method
+              </Button>
+            )}
+          </div>
+          
+          {/* Ride details */}
+          <div className="my-6 space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-black rounded-full"></div>
+              <p className="flex-1">{pickupLocation}</p>
             </div>
-            
-            {/* Ride details */}
-            <div className="my-6 space-y-2">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-black rounded-full"></div>
-                <p className="flex-1">{pickupLocation}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-black rounded-full"></div>
-                <p className="flex-1">{dropoffLocation}</p>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-black rounded-full"></div>
+              <p className="flex-1">{dropoffLocation}</p>
               </div>
             </div>
           </div>
           
           {/* Fixed button at the bottom */}
           <div className="p-4 bg-white border-t border-gray-200 w-full max-w-md mx-auto">
-            <Button
-              className="w-full bg-black hover:bg-gray-800 text-white py-6 text-lg"
-              disabled={!selectedPaymentMethod}
+          <Button
+            className="w-full bg-black hover:bg-gray-800 text-white py-6 text-lg"
+            disabled={!selectedPaymentMethod}
               onClick={handleContinueToConfirm}
             >
               Continue

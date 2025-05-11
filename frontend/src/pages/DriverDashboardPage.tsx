@@ -95,13 +95,13 @@ const DriverDashboardPage = () => {
       if (requestedRides.length > 0 && !showNewRideAlert && !newRide && online) {
         const latestRide = requestedRides[0];
         setNewRide(latestRide);
-        setShowNewRideAlert(true);
-        setNotifications(prev => prev + 1);
-        
-        // Play sound alert
+            setShowNewRideAlert(true);
+            setNotifications(prev => prev + 1);
+            
+            // Play sound alert
         try {
-          const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869.wav');
-          audio.play().catch(e => console.log('Audio play failed:', e));
+            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869.wav');
+            audio.play().catch(e => console.log('Audio play failed:', e));
         } catch (error) {
           console.error('Error playing sound:', error);
         }
@@ -164,10 +164,10 @@ const DriverDashboardPage = () => {
         setNewRide(null);
         dispatch(updateDriverAvailableRides(undefined));
         
-        toast({
+    toast({
           title: "You're offline",
           description: "You won't receive any ride requests",
-        });
+    });
       }
       
       setIsLoading(false);
@@ -210,16 +210,16 @@ const DriverDashboardPage = () => {
     
     // Short delay to simulate processing
     setTimeout(() => {
-      setShowNewRideAlert(false);
-      setNewRide(null);
+    setShowNewRideAlert(false);
+    setNewRide(null);
       
       // Force update ride requests
       dispatch(updateDriverAvailableRides(driverProfile.id));
-      
-      toast({
-        title: "Ride Accepted",
+    
+    toast({
+      title: "Ride Accepted",
         description: `You've accepted the ride to ${ride.dropoffLocation}`,
-      });
+    });
       
       setIsLoading(false);
     }, 800);
@@ -249,11 +249,11 @@ const DriverDashboardPage = () => {
         dispatch(updateDriverAvailableRides(driverProfile.id));
       }
       
-      toast({
-        title: "Ride Started",
-        description: "You've started the ride. Drive safely!",
-      });
-      
+    toast({
+      title: "Ride Started",
+      description: "You've started the ride. Drive safely!",
+    });
+    
       setIsLoading(false);
     }, 800);
   };

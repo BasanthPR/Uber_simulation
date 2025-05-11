@@ -49,17 +49,17 @@ const MainNavbar = () => {
           </a>
           
           <div className="flex items-center space-x-2">
-            <Link to="/login">
+          <Link to="/login">
               <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
-                Log in
-              </Button>
-            </Link>
-            
-            <Link to="/signup">
-              <Button variant="default" size="sm" className="bg-white text-black hover:bg-gray-100">
-                Sign up
-              </Button>
-            </Link>
+              Log in
+            </Button>
+          </Link>
+          
+          <Link to="/signup">
+            <Button variant="default" size="sm" className="bg-white text-black hover:bg-gray-100">
+              Sign up
+            </Button>
+          </Link>
           </div>
         </div>
       </div>

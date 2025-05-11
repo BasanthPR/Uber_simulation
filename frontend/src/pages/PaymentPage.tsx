@@ -173,7 +173,7 @@ const PaymentPage = () => {
                   {activeRide.status === 'accepted' && (
                     <>
                       <p className="font-medium">Arriving in {driverEta}</p>
-                      <p className="text-sm text-gray-500">Driver is on the way</p>
+                  <p className="text-sm text-gray-500">Driver is on the way</p>
                     </>
                   )}
                   {activeRide.status === 'started' && (
@@ -214,72 +214,72 @@ const PaymentPage = () => {
             
             {activeRide.status === 'completed' && (
               <>
-                <div className="border-t border-b border-gray-200 py-4 mb-4">
-                  <h3 className="text-lg font-bold mb-2">Payment Method</h3>
-                  
-                  {customerProfile?.paymentMethods && customerProfile.paymentMethods.length > 0 ? (
-                    <div className="space-y-2">
-                      {customerProfile.paymentMethods.map((method) => (
-                        <div 
-                          key={method.id}
-                          className={`flex items-center justify-between p-3 rounded-lg border ${selectedPaymentMethod === method.id ? 'border-black bg-gray-50' : 'border-gray-200'}`}
-                          onClick={() => setSelectedPaymentMethod(method.id)}
-                        >
-                          <div className="flex items-center gap-3">
-                            <CreditCard className="h-6 w-6 text-gray-600" />
-                            <div>
-                              <p className="font-medium">{method.name}</p>
-                              <p className="text-sm text-gray-500">
-                                {method.type} •••• {method.last4Digits}
-                              </p>
-                            </div>
-                          </div>
-                          {selectedPaymentMethod === method.id && (
-                            <Check className="h-5 w-5" />
-                          )}
+            <div className="border-t border-b border-gray-200 py-4 mb-4">
+              <h3 className="text-lg font-bold mb-2">Payment Method</h3>
+              
+              {customerProfile?.paymentMethods && customerProfile.paymentMethods.length > 0 ? (
+                <div className="space-y-2">
+                  {customerProfile.paymentMethods.map((method) => (
+                    <div 
+                      key={method.id}
+                      className={`flex items-center justify-between p-3 rounded-lg border ${selectedPaymentMethod === method.id ? 'border-black bg-gray-50' : 'border-gray-200'}`}
+                      onClick={() => setSelectedPaymentMethod(method.id)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <CreditCard className="h-6 w-6 text-gray-600" />
+                        <div>
+                          <p className="font-medium">{method.name}</p>
+                          <p className="text-sm text-gray-500">
+                            {method.type} •••• {method.last4Digits}
+                          </p>
                         </div>
-                      ))}
-                      
-                      <Button variant="outline" className="w-full mt-2">
-                        Add payment method
-                      </Button>
+                      </div>
+                      {selectedPaymentMethod === method.id && (
+                        <Check className="h-5 w-5" />
+                      )}
                     </div>
-                  ) : (
-                    <div className="text-center py-4">
-                      <p className="text-gray-500 mb-2">No payment methods available</p>
-                      <Button variant="outline">
-                        Add payment method
-                      </Button>
-                    </div>
-                  )}
+                  ))}
+                  
+                  <Button variant="outline" className="w-full mt-2">
+                    Add payment method
+                  </Button>
                 </div>
-                
-                <div className="mb-6">
-                  <div className="flex justify-between mb-2">
-                    <span className="text-black font-medium">Base fare</span>
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-gray-500 mb-2">No payment methods available</p>
+                  <Button variant="outline">
+                    Add payment method
+                  </Button>
+                </div>
+              )}
+            </div>
+            
+            <div className="mb-6">
+              <div className="flex justify-between mb-2">
+                <span className="text-black font-medium">Base fare</span>
                     <span className="text-black font-medium">${(activeRide.price * 0.8).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-black font-medium">Service fee</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span className="text-black font-medium">Service fee</span>
                     <span className="text-black font-medium">${(activeRide.price * 0.2).toFixed(2)}</span>
                   </div>
                   {activeRide.distance && (
                     <div className="flex justify-between mb-2">
                       <span className="text-black font-medium">Distance</span>
                       <span className="text-black font-medium">{activeRide.distance.toFixed(1)} miles</span>
-                    </div>
+              </div>
                   )}
-                  <div className="flex justify-between font-bold text-lg">
-                    <span className="text-black">Total</span>
+              <div className="flex justify-between font-bold text-lg">
+                <span className="text-black">Total</span>
                     <span className="text-black">${activeRide.price.toFixed(2)}</span>
-                  </div>
-                </div>
-                
-                <Button 
-                  className="w-full py-6 text-lg bg-black hover:bg-gray-800 text-white"
-                  onClick={handleCompletePayment}
-                  disabled={isProcessing || !selectedPaymentMethod}
-                >
+              </div>
+            </div>
+            
+            <Button 
+              className="w-full py-6 text-lg bg-black hover:bg-gray-800 text-white"
+              onClick={handleCompletePayment}
+              disabled={isProcessing || !selectedPaymentMethod}
+            >
                   {isProcessing ? "Processing..." : `Pay $${activeRide.price.toFixed(2)}`}
                 </Button>
               </>
@@ -341,7 +341,7 @@ const PaymentPage = () => {
                   onClick={() => navigate('/ride')}
                 >
                   Back to Ride
-                </Button>
+            </Button>
               </div>
             )}
           </div>

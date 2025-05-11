@@ -48,7 +48,7 @@ const HomePage = () => {
           {/* Left side - Ride Request Form */}
           <div className="w-full md:w-1/2 lg:w-5/12">
             <h1 className="text-5xl font-bold mb-8">Go anywhere with Uber</h1>
-            
+              
             <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
               <div className="space-y-4 mb-4">
                 {/* Pickup location */}
@@ -78,34 +78,34 @@ const HomePage = () => {
                     onChange={(e) => setDestination(e.target.value)}
                   />
                 </div>
-              </div>
-              
+                </div>
+                
               <div className="flex space-x-4 mb-4">
                 {/* Pickup time selector */}
                 <Button variant="outline" className="flex items-center justify-between w-1/2 border border-gray-300 p-2">
-                  <div className="flex items-center">
-                    <Clock className="h-5 w-5 mr-2" />
+                    <div className="flex items-center">
+                      <Clock className="h-5 w-5 mr-2" />
                     <span>Today</span>
-                  </div>
-                </Button>
-                
+                    </div>
+                  </Button>
+                  
                 {/* Time selector */}
                 <Button variant="outline" className="flex items-center justify-between w-1/2 border border-gray-300 p-2">
-                  <div className="flex items-center">
-                    <Clock className="h-5 w-5 mr-2" />
+                        <div className="flex items-center">
+                          <Clock className="h-5 w-5 mr-2" />
                     <span>{pickupTime}</span>
-                  </div>
-                </Button>
-              </div>
-              
-              <Button 
+                        </div>
+                      </Button>
+                </div>
+                
+                <Button 
                 className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 rounded-md"
                 onClick={handleRideSearch}
                 disabled={!pickup || !destination}
-              >
-                <Search className="h-5 w-5 mr-2" />
-                Search
-              </Button>
+                >
+                  <Search className="h-5 w-5 mr-2" />
+                  Search
+                </Button>
             </div>
             
             {recentRides.length > 0 && (
@@ -163,7 +163,7 @@ const HomePage = () => {
             <div 
               className="bg-gray-100 p-6 rounded-xl hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => handleRideOptionClick('reserve')}
-            >
+                >
               <h3 className="text-xl font-medium mb-1">Reserve</h3>
               <p className="text-gray-600 mb-4">Schedule your ride in advance for peace of mind</p>
             </div>
@@ -174,8 +174,8 @@ const HomePage = () => {
             >
               <h3 className="text-xl font-medium mb-1">Group Ride</h3>
               <p className="text-gray-600 mb-4">Travel with friends and split the fare automatically</p>
-            </div>
-          </div>
+                  </div>
+                </div>
         </section>
         
         {/* Footer */}
